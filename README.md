@@ -79,17 +79,34 @@ uv run jupyter notebook appalachian_trail_analysis.ipynb
   - `fkt_visualization.py` - FKT-specific visualizations
   - `daylight_analysis.py` - Daylight hours calculations
   - `daylight_visualization.py` - Daylight-specific visualizations
-  - `daylight_analysis.py` - Daylight constraint calculations
-  - `daylight_visualization.py` - Daylight analysis visualizations
+  - `arcgis_integration.py` - ArcGIS data integration module
 - `outputs/` - Generated visualizations and reports
 - `main_analysis.py` - Main analysis script
 - `fkt_analysis_report.py` - FKT-specific analysis script
 - `daylight_analysis_report.py` - Daylight-constrained analysis script
 - `appalachian_trail_analysis.ipynb` - Interactive analysis notebook
+- `arcgis_enhanced_analysis.ipynb` - ArcGIS data integration analyses (NEW!)
 
 ## Data Sources
 
-The project uses publicly available Appalachian Trail data including GPS coordinates, elevation data, and trail information.
+The project can use either:
+
+### Synthetic Data (Current Default)
+- Generated realistic trail data for demonstration
+- 10 points per mile across all 14 states
+- Modeled elevation profiles based on known terrain
+
+### Real ArcGIS Data (Optional Enhancement)
+- **AT Natural Resource Condition Assessment Hub** (Official NPS/ATC)
+  - Main Hub: [AT NRCA Hub](https://appalachian-trail-natural-resource-condition-assessment-clus.hub.arcgis.com)
+  - **Datasets**: [Browse All AT Datasets](https://appalachian-trail-natural-resource-condition-assessment-clus.hub.arcgis.com/search?collection=dataset) ⭐
+- **USGS National Map** elevation profiles (DEM)
+- **Esri Living Atlas** contextual data layers
+- Exact trail coordinates, shelters, water sources, and more
+
+**Quick Start**: See `QUICK_START_ARCGIS.md` for 3-step process to fetch real data
+
+**Detailed Guides**: `AT_HUB_GUIDE.md` for hub exploration, `ARCGIS_INTEGRATION.md` for complete integration
 
 ## About the Appalachian Trail
 
