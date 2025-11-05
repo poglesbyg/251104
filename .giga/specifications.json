@@ -1,0 +1,22 @@
+[
+  {
+    "fileName": "main-overview.mdc",
+    "description": "Complete system overview documenting the Appalachian Trail Analysis & Visualization System architecture, component relationships, and high-level data flow"
+  },
+  {
+    "fileName": "trail-analysis-algorithms.mdc",
+    "description": "Detailed documentation of core analysis algorithms including difficulty classification, hiking time estimation using Naismith's rule variants, and section difficulty analysis methodology"
+  },
+  {
+    "fileName": "terrain-generation-model.mdc",
+    "description": "Comprehensive documentation of the terrain generation system, including state-specific elevation profiles, multi-frequency sine wave modeling, and geographic accuracy implementations"
+  },
+  {
+    "fileName": "data-flow-pipeline.mdc",
+    "description": "Documentation of the data pipeline from terrain generation through analysis to visualization, including component interactions and data transformations"
+  },
+  {
+    "fileName": "visualization-specifications.mdc",
+    "description": "Technical specifications for the visualization implementations, including elevation profiles, difficulty distribution analysis, and interactive trail mapping algorithms"
+  }
+]
