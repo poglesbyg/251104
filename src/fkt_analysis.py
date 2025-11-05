@@ -271,8 +271,51 @@ class FKTAnalyzer:
         
         return pd.DataFrame(terrain_pace)
     
-    def print_comprehensive_report(self):
-        """Print a comprehensive FKT analysis report."""
+    def analyze_daylight_constrained_fkt(self, daylight_analyzer=None) -> Dict:
+        """
+        Analyze FKT with daylight-only hiking constraints.
+        
+        Args:
+            daylight_analyzer: DaylightAnalyzer instance
+            
+        Returns:
+            Dictionary with daylight-constrained analysis
+        """
+        if daylight_analyzer is None:
+            # Import here to avoid circular dependency
+            from daylight_analysis import DaylightAnalyzer
+            daylight_analyzer = DaylightAnalyzer(self.df)
+        
+        # Get daylight-constrained FKT analysis
+        daylight_fkt = daylight_analyzer.calculate_fkt_with_daylight(
+            self.FKT_DAYS + self.FKT_HOURS / 24
+        )
+        
+        # Calculate what duration is needed for daylight-only at reasonable pace
+        from datetime import datetime
+        spring_start = datetime(2024, 3, 15)
+        
+        # Try different paces
+        pace_scenarios = []
+        for pace in [2.5, 3.0, 3.5, 4.0]:
+            duration = daylight_analyzer.calculate_daylight_based_duration(
+                pace, spring_start
+            )
+            pace_scenarios.append(duration)
+        
+        return {
+            'fkt_daylight_analysis': daylight_fkt,
+            'daylight_duration_scenarios': pace_scenarios
+        }
+    
+    def print_comprehensive_report(self, include_daylight: bool = False, daylight_analyzer=None):
+        """
+        Print a comprehensive FKT analysis report.
+        
+        Args:
+            include_daylight: Whether to include daylight analysis
+            daylight_analyzer: DaylightAnalyzer instance (required if include_daylight=True)
+        """
         print("=" * 80)
         print("APPALACHIAN TRAIL FASTEST KNOWN TIME (FKT) ANALYSIS")
         print("=" * 80)
@@ -326,6 +369,54 @@ class FKTAnalyzer:
         print("in ultra-endurance sports, requiring exceptional fitness, mental")
         print("toughness, and strategic planning.")
         print("=" * 80)
+        
+        # Add daylight analysis if requested
+        if include_daylight and daylight_analyzer:
+            print("\n" + "=" * 80)
+            print("DAYLIGHT-ONLY HIKING ANALYSIS")
+            print("=" * 80)
+            
+            daylight_analysis = self.analyze_daylight_constrained_fkt(daylight_analyzer)
+            
+            print("\n🌞 FKT PACE WITH DAYLIGHT CONSTRAINTS:")
+            print("\n  The current FKT record was set with near 24/7 hiking.")
+            print("  Here's what the same pace would require with daylight-only:")
+            
+            for scenario in daylight_analysis['fkt_daylight_analysis']['scenarios']:
+                print(f"\n    {scenario['scenario']}:")
+                print(f"      Average daylight: {scenario['avg_daylight']} hours/day")
+                print(f"      Required pace (using all daylight): {scenario['required_pace_mph']} mph")
+                print(f"      Realistic pace (75% hiking): {scenario['realistic_pace_mph']} mph")
+                print(f"      Feasibility: {scenario['feasible']}")
+            
+            print("\n  💡 For comparison, ultramarathon runners sustain 6-8 mph.")
+            print("     The FKT with daylight-only would require running pace!")
+            
+            print("\n📊 REALISTIC DAYLIGHT-ONLY DURATIONS:")
+            print("\n  Starting mid-March (optimal for NOBO):")
+            
+            for scenario in daylight_analysis['daylight_duration_scenarios']:
+                pace = scenario['target_pace_mph']
+                days = scenario['total_days']
+                months = scenario['total_months']
+                mpd = scenario['miles_per_day']
+                
+                # Add difficulty label
+                if days < 60:
+                    difficulty = "Very Fast"
+                elif days < 90:
+                    difficulty = "Fast"
+                elif days < 150:
+                    difficulty = "Moderate"
+                else:
+                    difficulty = "Leisurely"
+                
+                print(f"\n    {pace} mph pace ({difficulty}):")
+                print(f"      {mpd:.1f} miles/day over {days:.0f} days ({months:.1f} months)")
+                print(f"      Finish: {scenario['end_date']}")
+            
+            print("\n  ✨ Most thru-hikers maintain 2.0-3.0 mph with daylight-only hiking.")
+            print("=" * 80)
 
 
 if __name__ == '__main__':
