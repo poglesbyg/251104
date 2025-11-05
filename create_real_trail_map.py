@@ -62,21 +62,34 @@ def main():
     print("CREATING ENHANCED MAP WITH REAL ARCGIS COORDINATES")
     print("="*80 + "\n")
     
-    # Load raw GeoJSON to get actual trail segments
+    # Load COMPLETE trail data (all segments)
+    complete_file = './data/arcgis_cache/at_trail_complete.json'
     raw_file = './data/arcgis_cache/at_trail_raw.json'
     
-    if not os.path.exists(raw_file):
-        print(f"❌ Raw GeoJSON not found: {raw_file}")
-        print("\nRun first: uv run python fetch_real_at_data.py")
+    # Try complete file first
+    if os.path.exists(complete_file):
+        data_file = complete_file
+        print(f"Loading COMPLETE trail data: {complete_file}")
+    elif os.path.exists(raw_file):
+        data_file = raw_file
+        print(f"Loading partial trail data: {raw_file}")
+        print("⚠️  For complete trail, run: uv run python fetch_complete_at_data.py\n")
+    else:
+        print(f"❌ No trail data found")
+        print("\nRun first: uv run python fetch_complete_at_data.py")
         return
     
-    print(f"Loading raw trail data: {raw_file}")
     import json
-    with open(raw_file, 'r') as f:
+    with open(data_file, 'r') as f:
         geojson_data = json.load(f)
     
     features = geojson_data.get('features', [])
-    print(f"✓ Loaded {len(features)} trail segment features\n")
+    print(f"✓ Loaded {len(features)} trail segment features")
+    
+    # Count total points
+    total_points = sum(len(f.get('geometry', {}).get('coordinates', [])) 
+                      for f in features if f.get('geometry', {}).get('type') == 'LineString')
+    print(f"  Total GPS points: {total_points:,}\n")
     
     # Calculate center point from all features
     all_lats = []
