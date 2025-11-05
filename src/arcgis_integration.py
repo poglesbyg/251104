@@ -24,9 +24,10 @@ class ArcGISDataFetcher:
     AT_NRCA_DATASETS = "https://appalachian-trail-natural-resource-condition-assessment-clus.hub.arcgis.com/search?collection=dataset"
     AT_NRCA_APP = "https://appalachian-trail-natural-resource-condition-assessment-clus.hub.arcgis.com/apps/61c37a4a9a004ee994bde60d6792041b/explore"
     
-    # TODO: Update with actual service URL found from the app above
-    # Instructions: Open the app, press F12, Network tab, look for FeatureServer URLs
-    ATC_SERVICE_URL = "https://services1.arcgis.com/fBc8EJBxQRMcHlei/arcgis/rest/services"
+    # REAL WORKING SERVICE! Appalachian National Scenic Trail
+    # Source: https://services6.arcgis.com/9tSn0MQDcjQ12ht2/arcgis/rest/services
+    AT_TRAIL_SERVICE = "https://services6.arcgis.com/9tSn0MQDcjQ12ht2/arcgis/rest/services/Appalachian_National_Scenic_Trail/FeatureServer"
+    ATC_SERVICE_URL = "https://services6.arcgis.com/9tSn0MQDcjQ12ht2/arcgis/rest/services"
     
     # USGS Elevation service
     USGS_ELEVATION_URL = "https://nationalmap.gov/epqs/pqs.php"
@@ -55,9 +56,8 @@ class ArcGISDataFetcher:
         Returns:
             GeoJSON or dict with trail data
         """
-        # Example query for AT centerline
-        # Note: Actual endpoint may vary - check ArcGIS Hub for current services
-        url = f"{self.ATC_SERVICE_URL}/AT_Centerline/FeatureServer/0/query"
+        # Use the real working AT service!
+        url = f"{self.AT_TRAIL_SERVICE}/0/query"
         
         params = {
             'where': '1=1',  # Get all features
